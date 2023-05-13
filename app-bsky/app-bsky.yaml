@@ -237,8 +237,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileViewBasic'
-  /feed/getAuthorFeed:
+  /getAuthorFeed:
     get:
+      tags:
+      - app.bsky.feed
       parameters:
       - name: actor
         in: query
@@ -289,8 +291,10 @@ paths:
                 oneOf:
                 - $ref: '#/components/schemas/BlockedActor'
                 - $ref: '#/components/schemas/BlockedByActor'
-  /feed/getLikes:
+  /getLikes:
     get:
+      tags:
+      - app.bsky.feed
       parameters:
       - name: uri
         in: query
@@ -348,8 +352,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Like'
-  /feed/getPostThread:
+  /getPostThread:
     get:
+      tags:
+      - app.bsky.feed
       parameters:
       - name: uri
         in: query
@@ -390,8 +396,10 @@ paths:
                 properties:
                   name:
                     type: string
-  /feed/getPosts:
+  /getPosts:
     get:
+      tags:
+      - app.bsky.feed
       parameters:
       - name: uris
         in: query
