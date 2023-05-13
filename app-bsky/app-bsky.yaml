@@ -1,8 +1,7 @@
 openapi: 3.0.0
 info:
   title: Bluesky API
-  description: Unofficial OpenAPI specification for the AT Protocols native server
-    endpoints.
+  description: Unofficial OpenAPI specification for the Bluesky API endpoints.
   contact:
     email: torin@imp.sh
   license:
