@@ -1,53 +1,52 @@
 openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
 info:
-  title: Bluesky API
   description: Unofficial OpenAPI specification for the Bluesky API endpoints.
+  version: '1.0'
+  title: Bluesky API
   contact:
     email: torin@imp.sh
   license:
     name: MIT
-    url: https://opensource.org/license/mit/
-  version: "0.1"
-servers:
-- url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
-  description: SwaggerHub API Auto Mocking
+    url: 'https://opensource.org/license/mit/'
 paths:
   /getPreferences:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Get private preferences attached to the account.
       operationId: getPreferences
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                required:
-                - preferences
                 type: object
+                required:
+                  - preferences
                 properties:
                   preferences:
                     $ref: '#/components/schemas/Preferences'
   /getProfile:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Get a detailed profile view of an actor.
       operationId: getProfile
       parameters:
-      - name: actor
-        in: query
-        description: Identifier of the actor to get the profile for.
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-identifier
+        - name: actor
+          in: query
+          description: Identifier of the actor to get the profile for.
+          required: true
+          schema:
+            type: string
+            format: at-identifier
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
@@ -56,31 +55,31 @@ paths:
   /getProfiles:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Get detailed profile views of multiple actors.
       operationId: getProfiles
       parameters:
-      - name: actors
-        in: query
-        description: Identifiers of the actors to get the profiles for.
-        required: true
-        style: form
-        explode: true
-        schema:
-          maxItems: 25
-          type: array
-          items:
-            type: string
-            format: at-identifier
+        - name: actors
+          in: query
+          description: Identifiers of the actors to get the profiles for.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: at-identifier
+            maxItems: 25
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                required:
-                - profiles
                 type: object
+                required:
+                  - profiles
                 properties:
                   profiles:
                     type: array
@@ -89,39 +88,35 @@ paths:
   /getSuggestions:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Get a list of actors suggested for following.
       description: Used in discovery UIs.
       operationId: getSuggestions
       parameters:
-      - name: limit
-        in: query
-        description: The maximum number of suggested actors to return.
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        description: A cursor for pagination.
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: limit
+          in: query
+          description: The maximum number of suggested actors to return.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: A cursor for pagination.
+          required: false
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
-                required:
-                - actors
                 type: object
+                required:
+                  - actors
                 properties:
                   cursor:
                     type: string
@@ -132,65 +127,59 @@ paths:
   /putPreferences:
     post:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Sets the private preferences attached to the account.
       operationId: putPreferences
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - preferences
               type: object
+              required:
+                - preferences
               properties:
                 preferences:
                   $ref: '#/components/schemas/Preferences'
-        required: true
       responses:
-        "200":
+        '200':
           description: Successful operation
-        "400":
+        '400':
           description: Invalid input
   /searchActors:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Find actors matching search criteria.
       operationId: searchActors
       parameters:
-      - name: term
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: term
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          required: false
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          required: false
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                required:
-                - actors
                 type: object
+                required:
+                  - actors
                 properties:
                   cursor:
                     type: string
@@ -201,36 +190,32 @@ paths:
   /searchActorsTypeahead:
     get:
       tags:
-      - App.Bsky.actor
+        - app.bsky.actor
       summary: Find actor suggestions for a search term.
       operationId: searchActorsTypeahead
       parameters:
-      - name: term
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
+        - in: query
+          name: term
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          required: false
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                required:
-                - actors
                 type: object
+                required:
+                  - actors
                 properties:
                   actors:
                     type: array
@@ -239,42 +224,34 @@ paths:
   /getAuthorFeed:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       parameters:
-      - name: actor
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-identifier
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: actor
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-identifier
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: A view of an actor's feed
           content:
             application/json:
               schema:
-                required:
-                - feed
                 type: object
+                required:
+                  - feed
                 properties:
                   cursor:
                     type: string
@@ -282,62 +259,51 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/FeedViewPost'
-        "400":
+        '400':
           description: Errors
           content:
             application/json:
               schema:
                 oneOf:
-                - $ref: '#/components/schemas/BlockedActor'
-                - $ref: '#/components/schemas/BlockedByActor'
+                  - $ref: '#/components/schemas/BlockedActor'
+                  - $ref: '#/components/schemas/BlockedByActor'
   /getLikes:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       parameters:
-      - name: uri
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-uri
-      - name: cid
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: cid
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-uri
+        - name: cid
+          in: query
+          schema:
+            type: string
+            format: cid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: A list of likes for a specific post
           content:
             application/json:
               schema:
-                required:
-                - likes
-                - uri
                 type: object
+                required:
+                  - uri
+                  - likes
                 properties:
                   uri:
                     type: string
@@ -354,39 +320,34 @@ paths:
   /getPostThread:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       parameters:
-      - name: uri
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-uri
-      - name: depth
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-uri
+        - name: depth
+          in: query
+          schema:
+            type: integer
       responses:
-        "200":
+        '200':
           description: The post thread for a specific post
           content:
             application/json:
               schema:
-                required:
-                - thread
                 type: object
+                required:
+                  - thread
                 properties:
                   thread:
                     anyOf:
-                    - $ref: '#/components/schemas/ThreadViewPost'
-                    - $ref: '#/components/schemas/NotFoundPost'
-                    - $ref: '#/components/schemas/BlockedPost'
-        "404":
+                      - $ref: '#/components/schemas/ThreadViewPost'
+                      - $ref: '#/components/schemas/NotFoundPost'
+                      - $ref: '#/components/schemas/BlockedPost'
+        '404':
           description: Post not found
           content:
             application/json:
@@ -395,31 +356,30 @@ paths:
                 properties:
                   name:
                     type: string
+                    description: NotFound
   /getPosts:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       parameters:
-      - name: uris
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          maxLength: 25
-          type: array
-          items:
-            type: string
-            format: at-uri
+        - name: uris
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: at-uri
+            maxLength: 25
       responses:
-        "200":
+        '200':
           description: A batch of specific posts
           content:
             application/json:
               schema:
-                required:
-                - posts
                 type: object
+                required:
+                  - posts
                 properties:
                   posts:
                     type: array
@@ -428,51 +388,40 @@ paths:
   /repostedBy:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       parameters:
-      - name: uri
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-uri
-      - name: cid
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: cid
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-uri
+        - name: cid
+          in: query
+          schema:
+            type: string
+            format: cid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: The list of actors who have reposted a specific post
           content:
             application/json:
               schema:
-                required:
-                - repostedBy
-                - uri
                 type: object
+                required:
+                  - uri
+                  - repostedBy
                 properties:
                   uri:
                     type: string
@@ -485,46 +434,37 @@ paths:
                   repostedBy:
                     type: array
                     items:
-                      $ref: ./app.bsky.actor.defs.yaml#/components/schemas/ProfileView
+                      $ref: 'app.bsky.actor.defs.yaml#/components/schemas/ProfileView'
   /getTimeline:
     get:
       tags:
-      - app.bsky.feed
+        - app.bsky.feed
       description: A view of the user's home timeline.
       parameters:
-      - name: algorithm
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: algorithm
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: The user's home timeline
           content:
             application/json:
               schema:
-                required:
-                - feed
                 type: object
+                required:
+                  - feed
                 properties:
                   cursor:
                     type: string
@@ -534,10 +474,10 @@ paths:
                       $ref: '#/components/schemas/FeedViewPost'
   /follow:
     post:
-      tags:
-      - app.bsky.graph
-      summary: A social follow.
+      summary: "A social follow."
       operationId: follow
+      tags:
+        - app.bsky.graph
       requestBody:
         content:
           application/json:
@@ -545,7 +485,7 @@ paths:
               $ref: '#/components/schemas/Follow'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -557,36 +497,30 @@ paths:
                     description: The record key
                   record:
                     $ref: '#/components/schemas/Follow'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getBlocks:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Who is the requester's account blocking?
+      summary: "Who is the requester's account blocking?"
       operationId: getBlocks
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -599,44 +533,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getFollowers:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Who is following an actor?
+      summary: "Who is following an actor?"
       operationId: getFollowers
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: actor
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-identifier
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: actor
+          schema:
+            type: string
+            format: at-identifier
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -651,44 +577,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getFollows:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Who is an actor following?
+      summary: "Who is an actor following?"
       operationId: getFollows
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: actor
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-identifier
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: actor
+          schema:
+            type: string
+            format: at-identifier
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -703,44 +621,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getList:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Fetch a list of actors
+      summary: "Fetch a list of actors"
       operationId: getList
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: list
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-uri
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: list
+          schema:
+            type: string
+            format: at-uri
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -755,36 +665,30 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ListItemView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getListMutes:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Which lists is the requester's account muting?
+      summary: "Which lists is the requester's account muting?"
       operationId: getListMutes
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -797,44 +701,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ListView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getLists:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Fetch a list of lists that belong to an actor
+      summary: "Fetch a list of lists that belong to an actor"
       operationId: getLists
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: actor
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: at-identifier
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: actor
+          required: true
+          schema:
+            type: string
+            format: at-identifier
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
@@ -847,43 +743,37 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ListView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /getMutes:
     get:
-      tags:
-      - app.bsky.graph
-      summary: Who does the viewer mute?
+      summary: "Who does the viewer mute?"
       operationId: getMutes
+      tags:
+        - app.bsky.graph
       parameters:
-      - name: limit
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                required:
-                - mutes
                 type: object
+                required:
+                  - mutes
                 properties:
                   cursor:
                     type: string
@@ -891,264 +781,247 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-        "400":
+        '400':
           description: Invalid input
-        "500":
+        '500':
           description: Unexpected error
   /muteActor:
     post:
       tags:
-      - app.bsky.graph
-      summary: Mute an actor by did or handle.
+        - app.bsky.graph
+      summary: "Mute an actor by did or handle."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - actor
               type: object
+              required:
+                - actor
               properties:
                 actor:
                   type: string
-                  description: Actor identifier
+                  description: "Actor identifier"
                   format: uri
-        required: true
       responses:
-        "200":
-          description: Actor muted successfully
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '200':
+          description: "Actor muted successfully"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /muteActorList:
     post:
       tags:
-      - app.bsky.graph
-      summary: Mute a list of actors.
+        - app.bsky.graph
+      summary: "Mute a list of actors."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - list
               type: object
+              required:
+                - list
               properties:
                 list:
                   type: string
-                  description: List identifier
+                  description: "List identifier"
                   format: uri
-        required: true
       responses:
-        "200":
-          description: Actor list muted successfully
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '200':
+          description: "Actor list muted successfully"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /unmuteActor:
     post:
       tags:
-      - app.bsky.graph
-      summary: Unmute an actor by did or handle.
+        - app.bsky.graph
+      summary: "Unmute an actor by did or handle."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - actor
               type: object
+              required:
+                - actor
               properties:
                 actor:
                   type: string
-                  description: Actor identifier
+                  description: "Actor identifier"
                   format: at-identifier
-        required: true
       responses:
-        "200":
-          description: Actor unmuted successfully
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '200':
+          description: "Actor unmuted successfully"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /unmuteActorList:
     post:
       tags:
-      - app.bsky.graph
-      summary: Unmute a list of actors.
+        - app.bsky.graph
+      summary: "Unmute a list of actors."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - list
               type: object
+              required:
+                - list
               properties:
                 list:
                   type: string
-                  description: List URI
+                  description: "List URI"
                   format: at-uri
-        required: true
       responses:
-        "200":
-          description: Actors in the list unmuted successfully
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '200':
+          description: "Actors in the list unmuted successfully"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /getUnreadCount:
     get:
       tags:
-      - app.bsky.notification
-      summary: Get count of unread notifications.
+        - app.bsky.notification
+      summary: "Get count of unread notifications."
       parameters:
-      - name: seenAt
-        in: query
-        description: Datetime at which notifications were last seen
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: date-time
+        - name: seenAt
+          in: query
+          description: "Datetime at which notifications were last seen"
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
-        "200":
-          description: Successful operation
+        '200':
+          description: "Successful operation"
           content:
             application/json:
               schema:
-                required:
-                - count
                 type: object
+                required:
+                  - count
                 properties:
                   count:
                     type: integer
-                    description: Count of unread notifications
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+                    description: "Count of unread notifications"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /listNotifications:
     get:
       tags:
-      - app.bsky.notification
-      summary: List notifications.
+        - app.bsky.notification
+      summary: "List notifications."
       parameters:
-      - name: limit
-        in: query
-        description: Limit the number of notifications to fetch
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        description: Cursor for paginating through notifications
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: seenAt
-        in: query
-        description: Datetime at which notifications were last seen
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-          format: date-time
+        - name: limit
+          in: query
+          description: "Limit the number of notifications to fetch"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          description: "Cursor for paginating through notifications"
+          required: false
+          schema:
+            type: string
+        - name: seenAt
+          in: query
+          description: "Datetime at which notifications were last seen"
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
-        "200":
-          description: Successful operation
+        '200':
+          description: "Successful operation"
           content:
             application/json:
               schema:
-                required:
-                - notifications
                 type: object
+                required:
+                  - notifications
                 properties:
                   cursor:
                     type: string
-                    description: Cursor for the next page of notifications
+                    description: "Cursor for the next page of notifications"
                   notifications:
                     type: array
                     items:
                       $ref: '#/components/schemas/Notification'
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /updateSeen:
-    put:
+    post:
       tags:
-      - app.bsky.notification
-      summary: Notify server that the user has seen notifications.
+        - app.bsky.notification
+      summary: "Notify server that the user has seen notifications."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required:
-              - seenAt
               type: object
+              required:
+                - seenAt
               properties:
                 seenAt:
                   type: string
                   format: date-time
-        required: true
       responses:
-        "200":
-          description: Successful operation
-        "400":
-          description: Invalid request
-        "500":
-          description: Internal server error
+        '200':
+          description: "Successful operation"
+        '400':
+          description: "Invalid request"
+        '500':
+          description: "Internal server error"
   /popular:
     get:
       tags:
-      - app.bsky.unspecced
+        - app.bsky.unspecced
       summary: An unspecced view of globally popular items
       parameters:
-      - name: includeNsfw
-        in: query
-        description: Whether to include not safe for work items
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
-          default: false
-      - name: limit
-        in: query
-        description: The number of items to return
-        required: false
-        style: form
-        explode: true
-        schema:
-          maximum: 100
-          minimum: 1
-          type: integer
-          default: 50
-      - name: cursor
-        in: query
-        description: Cursor for pagination
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
+        - in: query
+          name: includeNsfw
+          schema:
+            type: boolean
+            default: false
+          description: Whether to include not safe for work items
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: The number of items to return
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Cursor for pagination
       responses:
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                required:
-                - feed
                 type: object
+                required:
+                  - feed
                 properties:
                   cursor:
                     type: string
@@ -1156,13 +1029,14 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/FeedViewPost'
+
 components:
   schemas:
     ProfileViewBasic:
-      required:
-      - did
-      - handle
       type: object
+      required:
+        - did
+        - handle
       properties:
         did:
           type: string
@@ -1171,8 +1045,8 @@ components:
           type: string
           format: handle
         displayName:
-          maxLength: 640
           type: string
+          maxLength: 640
         avatar:
           type: string
         viewer:
@@ -1181,11 +1055,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
+
     ProfileView:
-      required:
-      - did
-      - handle
       type: object
+      required:
+        - did
+        - handle
       properties:
         did:
           type: string
@@ -1194,11 +1069,11 @@ components:
           type: string
           format: handle
         displayName:
+          type: string
           maxLength: 640
-          type: string
         description:
-          maxLength: 2560
           type: string
+          maxLength: 2560
         avatar:
           type: string
         indexedAt:
@@ -1210,11 +1085,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
+
     ProfileViewDetailed:
-      required:
-      - did
-      - handle
       type: object
+      required:
+        - did
+        - handle
       properties:
         did:
           type: string
@@ -1223,11 +1099,11 @@ components:
           type: string
           format: handle
         displayName:
+          type: string
           maxLength: 640
-          type: string
         description:
-          maxLength: 2560
           type: string
+          maxLength: 2560
         avatar:
           type: string
         banner:
@@ -1247,6 +1123,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
+
     ViewerState:
       type: object
       properties:
@@ -1265,99 +1142,82 @@ components:
         followedBy:
           type: string
           format: at-uri
+
     Preferences:
       type: array
       items:
         oneOf:
-        - $ref: '#/components/schemas/AdultContentPref'
-        - $ref: '#/components/schemas/ContentLabelPref'
+          - $ref: '#/components/schemas/AdultContentPref'
+          - $ref: '#/components/schemas/ContentLabelPref'
+
     AdultContentPref:
-      required:
-      - enabled
       type: object
+      required:
+        - enabled
       properties:
         enabled:
           type: boolean
           default: false
+
     ContentLabelPref:
-      required:
-      - label
-      - visibility
       type: object
+      required:
+        - label
+        - visibility
       properties:
         label:
           type: string
         visibility:
           type: string
-          enum:
-          - show
-          - warn
-          - hide
+          enum: ['show', 'warn', 'hide']
+
     Label:
-      required:
-      - cts
-      - src
-      - uri
-      - val
       type: object
+      description: Metadata tag on an atproto resource (eg, repo or record)
+      required:
+        - src
+        - uri
+        - val
+        - cts
       properties:
         src:
           type: string
-          description: DID of the actor who created this label
           format: did
+          description: DID of the actor who created this label
         uri:
           type: string
-          description: "AT URI of the record, repository (account), or other resource\
-            \ which this label applies to"
           format: uri
+          description: AT URI of the record, repository (account), or other resource which this label applies to
         cid:
           type: string
-          description: "optionally, CID specifying the specific version of 'uri' resource\
-            \ this label applies to"
           format: cid
+          description: optionally, CID specifying the specific version of 'uri' resource this label applies to
         val:
-          maxLength: 128
           type: string
+          maxLength: 128
           description: the short string name of the value or type of this label
         neg:
           type: boolean
-          description: "if true, this is a negation label, overwriting a previous\
-            \ label"
+          description: if true, this is a negation label, overwriting a previous label
         cts:
           type: string
-          description: timestamp when this label was created
           format: datetime
-      description: "Metadata tag on an atproto resource (eg, repo or record)"
+          description: timestamp when this label was created
     ListViewBasic:
       type: object
-    Profile:
-      type: object
-      properties:
-        displayName:
-          maxLength: 640
-          type: string
-        description:
-          maxLength: 2560
-          type: string
-        avatar:
-          type: string
-          format: binary
-        banner:
-          type: string
-          format: binary
     ExternalEmbed:
-      required:
-      - external
       type: object
+      required:
+        - external
       properties:
         external:
           $ref: '#/components/schemas/External'
     External:
-      required:
-      - description
-      - title
-      - uri
       type: object
+      required:
+        - uri
+        - title
+        - description
       properties:
         uri:
           type: string
@@ -1367,22 +1227,22 @@ components:
         description:
           type: string
         thumb:
-          maxLength: 1000000
           type: string
           format: binary
+          maxLength: 1000000
     ExternalEmbedView:
-      required:
-      - external
       type: object
+      required:
+        - external
       properties:
         external:
           $ref: '#/components/schemas/ExternalView'
     ExternalView:
-      required:
-      - description
-      - title
-      - uri
       type: object
+      required:
+        - uri
+        - title
+        - description
       properties:
         uri:
           type: string
@@ -1394,43 +1254,43 @@ components:
         thumb:
           type: string
     ImagesEmbed:
-      required:
-      - images
       type: object
+      required:
+        - images
       properties:
         images:
-          maxItems: 4
           type: array
           items:
             $ref: '#/components/schemas/Image'
+          maxItems: 4
     Image:
-      required:
-      - alt
-      - image
       type: object
+      required:
+        - image
+        - alt
       properties:
         image:
-          maxLength: 1000000
           type: string
           format: binary
+          maxLength: 1000000
         alt:
           type: string
     ImagesEmbedView:
-      required:
-      - images
       type: object
+      required:
+        - images
       properties:
         images:
-          maxItems: 4
           type: array
           items:
             $ref: '#/components/schemas/ImageView'
+          maxItems: 4
     ImageView:
-      required:
-      - alt
-      - fullsize
-      - thumb
       type: object
+      required:
+        - thumb
+        - fullsize
+        - alt
       properties:
         thumb:
           type: string
@@ -1439,28 +1299,32 @@ components:
         alt:
           type: string
     RecordEmbed:
-      required:
-      - record
       type: object
+      required:
+        - record
       properties:
         record:
           $ref: '#/components/schemas/StrongRef'
     RecordEmbedView:
-      required:
-      - record
       type: object
+      required:
+        - record
       properties:
         record:
           type: object
-          properties: {}
+          properties:
+            oneOf:
+              - $ref: '#/components/schemas/ViewRecord'
+              - $ref: '#/components/schemas/ViewNotFound'
+              - $ref: '#/components/schemas/ViewBlocked'
     ViewRecord:
-      required:
-      - author
-      - cid
-      - indexedAt
-      - uri
-      - value
       type: object
+      required:
+        - uri
+        - cid
+        - author
+        - value
+        - indexedAt
       properties:
         uri:
           type: string
@@ -1480,61 +1344,61 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: '#/components/schemas/ImagesEmbedView'
-            - $ref: '#/components/schemas/ExternalEmbedView'
-            - $ref: '#/components/schemas/RecordEmbedView'
-            - $ref: '#/components/schemas/RecordWithMediaEmbedView'
+              - $ref: '#/components/schemas/ImagesEmbedView'
+              - $ref: '#/components/schemas/ExternalEmbedView'
+              - $ref: '#/components/schemas/RecordEmbedView'
+              - $ref: '#/components/schemas/RecordWithMediaEmbedView'
         indexedAt:
           type: string
           format: date-time
     ViewNotFound:
-      required:
-      - uri
       type: object
+      required:
+        - uri
       properties:
         uri:
           type: string
           format: at-uri
     ViewBlocked:
-      required:
-      - uri
       type: object
+      required:
+        - uri
       properties:
         uri:
           type: string
           format: at-uri
     RecordWithMediaEmbed:
-      required:
-      - media
-      - record
       type: object
+      required:
+        - record
+        - media
       properties:
         record:
           $ref: '#/components/schemas/RecordEmbed'
         media:
           oneOf:
-          - $ref: '#/components/schemas/ImagesEmbed'
-          - $ref: '#/components/schemas/ExternalEmbed'
+            - $ref: '#/components/schemas/ImagesEmbed'
+            - $ref: '#/components/schemas/ExternalEmbed'
     RecordWithMediaEmbedView:
-      required:
-      - media
-      - record
       type: object
+      required:
+        - record
+        - media
       properties:
         record:
           $ref: '#/components/schemas/RecordEmbedView'
         media:
           oneOf:
-          - $ref: '#/components/schemas/ImagesEmbedView'
-          - $ref: '#/components/schemas/ExternalEmbedView'
+            - $ref: '#/components/schemas/ImagesEmbedView'
+            - $ref: '#/components/schemas/ExternalEmbedView'
     PostView:
-      required:
-      - author
-      - cid
-      - indexedAt
-      - record
-      - uri
       type: object
+      required:
+        - uri
+        - cid
+        - author
+        - record
+        - indexedAt
       properties:
         uri:
           type: string
@@ -1545,13 +1409,13 @@ components:
         author:
           $ref: '#/components/schemas/ProfileViewBasic'
         record:
-          type: unknown
+          type: object
         embed:
           oneOf:
-          - $ref: '#/components/schemas/ImagesEmbedView'
-          - $ref: '#/components/schemas/ExternalEmbedView'
-          - $ref: l#/components/schemas/RecordEmbedView
-          - $ref: '#/components/schemas/RecordWithMediaEmbedView'
+            - $ref: '#/components/schemas/ImagesEmbedView'
+            - $ref: '#/components/schemas/ExternalEmbedView'
+            - $ref: 'l#/components/schemas/RecordEmbedView'
+            - $ref: '#/components/schemas/RecordWithMediaEmbedView'
         replyCount:
           type: integer
         repostCount:
@@ -1569,20 +1433,14 @@ components:
             $ref: '#/components/schemas/Label'
     BlockedActor:
       type: object
-      properties:
-        name:
-          type: string
     BlockedByActor:
       type: object
-      properties:
-        name:
-          type: string
     Like:
-      required:
-      - actor
-      - createdAt
-      - indexedAt
       type: object
+      required:
+        - indexedAt
+        - createdAt
+        - actor
       properties:
         indexedAt:
           type: string
@@ -1593,10 +1451,10 @@ components:
         actor:
           $ref: '#/components/schemas/ProfileView'
     FeedLike:
-      required:
-      - createdAt
-      - subject
       type: object
+      required:
+        - subject
+        - createdAt
       properties:
         subject:
           $ref: '#/components/schemas/StrongRef'
@@ -1604,17 +1462,18 @@ components:
           type: string
           format: datetime
     Post:
-      required:
-      - createdAt
-      - text
       type: object
+      required:
+        - text
+        - createdAt
       properties:
         text:
-          maxLength: 3000
           type: string
-          description: text
+          maxLength: 3000
+          description: 'text'
         entities:
           type: array
+          description: deprecated - replaced by app.bsky.richtext.facet.
           items:
             $ref: '#/components/schemas/Entity'
         facets:
@@ -1624,15 +1483,53 @@ components:
         reply:
           $ref: '#/components/schemas/ReplyRef'
         embed:
-          $ref: '#/components/schemas/Embed'
+          $ref: 'Embed'
         createdAt:
           type: string
           format: datetime
-    Repost:
-      required:
-      - createdAt
-      - subject
+    ReplyRef:
       type: object
+      required:
+        - root
+        - parent
+      properties:
+        root:
+          $ref: '#/components/schemas/StrongRef'
+        parent:
+          $ref: '#/components/schemas/StrongRef'
+    Entity:
+      type: object
+      description: Deprecated - use facets instead.
+      required:
+        - index
+        - type
+        - value
+      properties:
+        index:
+          $ref: '#/components/schemas/TextSlice'
+        type:
+          type: string
+          description: Expected values are 'mention' and 'link'.
+        value:
+          type: string
+    TextSlice:
+      type: object
+      description: Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings.
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: integer
+          minimum: 0
+        end:
+          type: integer
+          minimum: 0
+    Repost:
+      type: object
+      required:
+        - subject
+        - createdAt
       properties:
         subject:
           $ref: '#/components/schemas/StrongRef'
@@ -1640,10 +1537,10 @@ components:
           type: string
           format: datetime
     Block:
-      required:
-      - createdAt
-      - subject
       type: object
+      required:
+        - subject
+        - createdAt
       properties:
         subject:
           type: string
@@ -1652,10 +1549,10 @@ components:
           type: string
           format: datetime
     Follow:
-      required:
-      - createdAt
-      - subject
       type: object
+      required:
+        - subject
+        - createdAt
       properties:
         subject:
           type: string
@@ -1664,62 +1561,61 @@ components:
           type: string
           format: datetime
     ListRecord:
-      required:
-      - createdAt
-      - name
-      - purpose
       type: object
+      required:
+        - name
+        - purpose
+        - createdAt
       properties:
         purpose:
           $ref: '#/components/schemas/ListPurpose'
         name:
+          type: string
           maxLength: 64
           minLength: 1
-          type: string
         description:
-          maxLength: 3000
           type: string
+          maxLength: 3000
         descriptionFacets:
           type: array
           items:
             $ref: '#/components/schemas/RichTextFacet'
         avatar:
           type: string
-          description: "A binary file with a maximum size of 1,000,000 bytes. Accepts\
-            \ image/png or image/jpeg file types."
           format: binary
+          description: "A binary file with a maximum size of 1,000,000 bytes. Accepts image/png or image/jpeg file types."
         createdAt:
           type: string
           format: date-time
     ListItemRecord:
-      required:
-      - createdAt
-      - list
-      - subject
       type: object
+      required:
+        - subject
+        - list
+        - createdAt
       properties:
         subject:
           type: string
-          description: Decentralized identifier (DID)
+          description: "Decentralized identifier (DID)"
           format: uri
         list:
           type: string
-          description: Unique identifier of the list
+          description: "Unique identifier of the list"
           format: uri
         createdAt:
           type: string
-          description: Creation date of the list item
+          description: "Creation date of the list item"
           format: date-time
     Notification:
-      required:
-      - author
-      - cid
-      - indexedAt
-      - isRead
-      - reason
-      - record
-      - uri
       type: object
+      required:
+        - uri
+        - cid
+        - author
+        - reason
+        - record
+        - isRead
+        - indexedAt
       properties:
         uri:
           type: string
@@ -1730,13 +1626,7 @@ components:
           $ref: '#/components/schemas/ProfileView'
         reason:
           type: string
-          enum:
-          - like
-          - repost
-          - follow
-          - mention
-          - reply
-          - quote
+          enum: [ "like", "repost", "follow", "mention", "reply", "quote" ]
         reasonSubject:
           type: string
           format: uri
@@ -1752,10 +1642,10 @@ components:
           items:
             $ref: '#/components/schemas/Label'
     Facet:
-      required:
-      - features
-      - index
       type: object
+      required:
+        - index
+        - features
       properties:
         index:
           $ref: '#/components/schemas/ByteSlice'
@@ -1763,37 +1653,182 @@ components:
           type: array
           items:
             oneOf:
-            - $ref: '#/components/schemas/Mention'
-            - $ref: '#/components/schemas/Link'
+              - $ref: '#/components/schemas/Mention'
+              - $ref: '#/components/schemas/Link'
     Mention:
-      required:
-      - did
       type: object
+      description: "A facet feature for actor mentions."
+      required:
+        - did
       properties:
         did:
           type: string
           format: did
-      description: A facet feature for actor mentions.
     Link:
-      required:
-      - uri
       type: object
+      description: "A facet feature for links."
+      required:
+        - uri
       properties:
         uri:
           type: string
           format: uri
-      description: A facet feature for links.
     ByteSlice:
-      required:
-      - byteEnd
-      - byteStart
       type: object
+      description: "A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings."
+      required:
+        - byteStart
+        - byteEnd
       properties:
         byteStart:
-          minimum: 0
           type: integer
+          minimum: 0
         byteEnd:
-          minimum: 0
           type: integer
-      description: "A text segment. Start is inclusive, end is exclusive. Indices\
-        \ are for utf8-encoded strings."
+          minimum: 0
+    FeedViewPost:
+      type: object
+      required:
+        - post
+      properties:
+        post:
+          $ref: '#/components/schemas/PostView'
+        reply:
+          $ref: '#/components/schemas/ReplyRef'
+        reason:
+          oneOf:
+            - $ref: '#/components/schemas/ReasonRepost'
+    ReasonRepost:
+      type: object
+      required:
+        - by
+        - indexedAt
+      properties:
+        by:
+          $ref: '#/components/schemas/ProfileViewBasic'
+        indexedAt:
+          type: string
+          format: datetime
+    ThreadViewPost:
+      type: object
+      required:
+        - post
+      properties:
+        post:
+          $ref: '#/components/schemas/PostView'
+        parent:
+          oneOf:
+            - $ref: '#/components/schemas/ThreadViewPost'
+            - $ref: '#/components/schemas/NotFoundPost'
+            - $ref: '#/components/schemas/BlockedPost'
+        replies:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ThreadViewPost'
+              - $ref: '#/components/schemas/NotFoundPost'
+              - $ref: '#/components/schemas/BlockedPost'
+    NotFoundPost:
+      type: object
+      required:
+        - uri
+        - notFound
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        notFound:
+          type: boolean
+          default: true
+    BlockedPost:
+      type: object
+      required:
+        - uri
+        - blocked
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        blocked:
+          type: boolean
+          default: true
+    ListView:
+      type: object
+      required:
+        - uri
+        - creator
+        - name
+        - purpose
+        - indexedAt
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        creator:
+          $ref: '#/components/schemas/ProfileView'
+        name:
+          type: string
+          maxLength: 64
+          minLength: 1
+        purpose:
+          $ref: '#/components/schemas/ListPurpose'
+        description:
+          type: string
+          description: Max graphemes 300, maxLength 3000
+        descriptionFacets:
+          type: array
+          items:
+            $ref: '#/components/schemas/RichTextFacet'
+        avatar:
+          type: string
+        viewer:
+          $ref: '#/components/schemas/ListViewerState'
+        indexedAt:
+          type: string
+          format: datetime
+    ListItemView:
+      type: object
+      required:
+        - subject
+      properties:
+        subject:
+          $ref: '#/components/schemas/ProfileView'
+    ListPurpose:
+      type: string
+      enum:
+        - modlist
+    Modlist:
+      type: string
+      description: A list of actors to apply an aggregate moderation action (mute/block) on
+    ListViewerState:
+      type: object
+      properties:
+        muted:
+          type: boolean
+    StrongRef:
+      type: object
+      description: A URI with a content-hash fingerprint.
+      required:
+        - uri
+        - cid
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        cid:
+          type: string
+          format: cid
+    RichTextFacet:
+      type: object
+      required:
+        - index
+        - features
+      properties:
+        index:
+          $ref: '#/components/schemas/ByteSlice'
+        features:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/Mention'
+              - $ref: '#/components/schemas/Link'
