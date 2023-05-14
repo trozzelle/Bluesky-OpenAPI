@@ -1,0 +1,2255 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
+info:
+  description: Unofficial OpenAPI specification for the AT Protocols native server endpoints.
+  version: "1.0.0"
+  title: AT Protocol Server API
+  contact:
+    email: torin@imp.sh
+  license:
+    name: MIT
+    url: 'https://opensource.org/license/mit/'
+paths:
+  /disableAccountInvites:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Disable an account from receiving new invite codes, but does not invalidate existing codes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account
+              properties:
+                account:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /disableInviteCodes:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Disable some set of codes and/or all codes associated with a set of users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codes:
+                  type: array
+                  items:
+                    type: string
+                accounts:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /enableAccountInvites:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Re-enable an accounts ability to receive invite codes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account
+              properties:
+                account:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /getInviteCodes:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: Admin view of invite codes
+      parameters:
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [ recent, usage ]
+            default: recent
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 100
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codes
+                properties:
+                  cursor:
+                    type: string
+                  codes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/inviteCode'
+        '400':
+          description: Invalid input
+  /getModerationAction:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: View details about a moderation action.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/actionViewDetail'
+        '400':
+          description: Invalid input
+  /getModerationActions:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: List moderation actions related to a subject.
+      parameters:
+        - name: subject
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - actions
+                properties:
+                  cursor:
+                    type: string
+                  actions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/actionView'
+        '400':
+          description: Invalid input
+  /getModerationReport:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: View details about a moderation report.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reportViewDetail'
+        '400':
+          description: Invalid input
+  /getModerationReports:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: List moderation reports related to a subject.
+      parameters:
+        - name: subject
+          in: query
+          schema:
+            type: string
+        - name: resolved
+          in: query
+          schema:
+            type: boolean
+        - name: actionType
+          in: query
+          schema:
+            type: string
+            enum:
+              - com.atproto.admin.defs#takedown
+              - com.atproto.admin.defs#flag
+              - com.atproto.admin.defs#acknowledge
+              - com.atproto.admin.defs#escalate
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - reports
+                properties:
+                  cursor:
+                    type: string
+                  reports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/reportView'
+        '400':
+          description: Invalid input
+  /getRecordViewDetail:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: View details about a record.
+      parameters:
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-uri
+        - name: cid
+          in: query
+          schema:
+            type: string
+            format: cid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/recordViewDetail'
+        '400':
+          description: Invalid input
+  /getRepo:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: View details about a repository.
+      parameters:
+        - name: did
+          in: query
+          required: true
+          schema:
+            type: string
+            format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/repoViewDetail'
+        '400':
+          description: Invalid input
+  /resolveModerationReports:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Resolve moderation reports by an action.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - actionId
+                - reportIds
+                - createdBy
+              properties:
+                actionId:
+                  type: integer
+                reportIds:
+                  type: array
+                  items:
+                    type: integer
+                createdBy:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/actionView'
+        '400':
+          description: Invalid input
+  /reverseModerationAction:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Reverse a moderation action.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - reason
+                - createdBy
+              properties:
+                id:
+                  type: integer
+                reason:
+                  type: string
+                createdBy:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/actionView'
+        '400':
+          description: Invalid input
+  /searchRepos:
+    get:
+      tags:
+        - com.atproto.admin
+      summary: Find repositories based on a search term.
+      parameters:
+        - in: query
+          name: term
+          schema:
+            type: string
+        - in: query
+          name: invitedBy
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - in: query
+          name: cursor
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - repos
+                properties:
+                  cursor:
+                    type: string
+                  repos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/repoView'
+        '400':
+          description: Invalid input
+  /takeModerationAction:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Take a moderation action on a repo.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+                - subject
+                - reason
+                - createdBy
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - com.atproto.admin.defs#takedown
+                    - com.atproto.admin.defs#flag
+                    - com.atproto.admin.defs#acknowledge
+                subject:
+                  oneOf:
+                    - $ref: '#/components/schemas/repoRef'
+                    - $ref: '#/components/schemas/strongRef'
+                subjectBlobCids:
+                  type: array
+                  items:
+                    type: string
+                    format: cid
+                createLabelVals:
+                  type: array
+                  items:
+                    type: string
+                negateLabelVals:
+                  type: array
+                  items:
+                    type: string
+                reason:
+                  type: string
+                createdBy:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/actionView'
+        '400':
+          description: Invalid input
+        '409':
+          description: SubjectHasAction error
+  /updateAccountHandle:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Administrative action to update an account's handle.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - did
+                - handle
+              properties:
+                did:
+                  type: string
+                  format: did
+                handle:
+                  type: string
+                  format: handle
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /updateAccountEmail:
+    post:
+      tags:
+        - com.atproto.admin
+      summary: Administrative action to update an account's email.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - account
+                - email
+              properties:
+                account:
+                  type: string
+                  format: at-identifier
+                  description: The handle or DID of the repo.
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /resolveHandle:
+    get:
+      tags:
+        - com.atproto.identity
+      summary: Provides the DID of a repo.
+      description: Provides the DID of a repo.
+      operationId: com.atproto.identity.resolveHandle
+      parameters:
+        - in: query
+          name: handle
+          schema:
+            type: string
+            format: handle
+          description: The handle to resolve. If not supplied, will resolve the host's own handle.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolveHandleOutput'
+  /updateHandle:
+    post:
+      tags:
+        - com.atproto.identity
+      summary: Updates the handle of the account.
+      description: Updates the handle of the account.
+      operationId: com.atproto.identity.updateHandle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateHandleInput'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+  /queryLabels:
+    get:
+      tags:
+        - com.atproto.label
+      summary: Find labels relevant to the provided URI patterns.
+      operationId: queryLabels
+      parameters:
+        - in: query
+          name: uriPatterns
+          required: true
+          description: List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: sources
+          description: Optional list of label sources (DIDs) to filter on
+          schema:
+            type: array
+            items:
+              type: string
+              format: did
+        - in: query
+          name: limit
+          description: The maximum number of results to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 250
+            default: 50
+        - in: query
+          name: cursor
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - labels
+                properties:
+                  cursor:
+                    type: string
+                  labels:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Label'
+  /subscribeLabels:
+    post:
+      tags:
+        - com.atproto.label
+      summary: Subscribe to label updates.
+      operationId: subscribeLabels
+      requestBody:
+        description: Cursor to start the subscription from
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cursor:
+                  type: integer
+                  description: The last known event to backfill from.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  seq:
+                    type: integer
+                  labels:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Label'
+        '400':
+          description: Future cursor error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    enum: [ OutdatedCursor ]
+                  message:
+                    type: string
+  /createReport:
+    post:
+      tags:
+        - com.atproto.moderation
+      summary: Report a repo or a record.
+      operationId: createReport
+      requestBody:
+        description: Report details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - reasonType
+                - subject
+              properties:
+                reasonType:
+                  $ref: '#/components/schemas/ReasonType'
+                reason:
+                  type: string
+                subject:
+                  oneOf:
+                    - $ref: '#/components/schemas/RepoRef'
+                    - $ref: '#/components/schemas/StrongRef'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                  - reasonType
+                  - subject
+                  - reportedBy
+                  - createdAt
+                properties:
+                  id:
+                    type: integer
+                  reasonType:
+                    $ref: '#/components/schemas/ReasonType'
+                  reason:
+                    type: string
+                  subject:
+                    oneOf:
+                      - $ref: '#/components/schemas/RepoRef'
+                      - $ref: '#/components/schemas/StrongRef'
+                  reportedBy:
+                    type: string
+                    format: did
+                  createdAt:
+                    type: string
+                    format: datetime
+  /applyWrites:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Apply a batch transaction of creates, updates, and deletes.
+      description: Apply a batch transaction of creates, updates, and deletes.
+      operationId: com.atproto.repo.applyWrites
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyWritesInput'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: InvalidSwap error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InvalidSwapError'
+  /createRecord:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Create a new record.
+      description: Create a new record.
+      operationId: com.atproto.repo.createRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRecordInput'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRecordOutput'
+        '400':
+          description: InvalidSwap
+          content: { }
+  /putRecord:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Write a record, creating or updating it as needed.
+      description: Write a record, creating or updating it as needed.
+      operationId: com.atproto.repo.putRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutRecordInput'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutRecordOutput'
+        '400':
+          description: InvalidSwap
+          content: { }
+  /deleteRecord:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Delete a record, or ensure it doesn't exist.
+      description: Delete a record, or ensure it doesn't exist.
+      operationId: com.atproto.repo.deleteRecord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteRecordInput'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: InvalidSwap
+          content: { }
+  /getRecord:
+    get:
+      tags:
+        - com.atproto.repo
+      summary: Get a record
+      description: Get a record.
+      operationId: com.atproto.repo.getRecord
+      parameters:
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-identifier
+          description: The handle or DID of the repo.
+        - name: collection
+          in: query
+          required: true
+          schema:
+            type: string
+            format: nsid
+          description: The NSID of the record collection.
+        - name: rkey
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The key of the record.
+        - name: cid
+          in: query
+          schema:
+            type: string
+            format: cid
+          description: The CID of the version of the record. If not specified, then return the most recent version.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+  /listRecords:
+    get:
+      tags:
+        - com.atproto.repo
+      summary: List a range of records in a collection
+      description: List a range of records in a collection.
+      operationId: com.atproto.repo.listRecords
+      parameters:
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-identifier
+          description: The handle or DID of the repo.
+        - name: collection
+          in: query
+          required: true
+          schema:
+            type: string
+            format: nsid
+          description: The NSID of the record type.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: The number of records to return.
+        - name: cursor
+          in: query
+          schema:
+            type: string
+        - name: reverse
+          in: query
+          schema:
+            type: boolean
+          description: Reverse the order of the returned records?
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - records
+                properties:
+                  cursor:
+                    type: string
+                  records:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Record'
+  /describeRepo:
+    get:
+      tags:
+        - com.atproto.repo
+      summary: Get information about the repo, including the list of collections.
+      description: Get information about the repo, including the list of collections.
+      operationId: com.atproto.repo.describeRepo
+      parameters:
+        - name: repo
+          in: query
+          required: true
+          schema:
+            type: string
+            format: at-identifier
+          description: The handle or DID of the repo.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepoDescription'
+  /rebaseRepo:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Simple rebase of repo that deletes history
+      description: Simple rebase of repo that deletes history
+      operationId: com.atproto.repo.rebaseRepo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RebaseRepoInput'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: InvalidSwap
+          content: { }
+  /uploadBlob:
+    post:
+      tags:
+        - com.atproto.repo
+      summary: Upload a new blob to be added to repo in a later request.
+      description: Upload a new blob to be added to repo in a later request.
+      operationId: com.atproto.repo.uploadBlob
+      requestBody:
+        required: true
+        content:
+          '*/*': { }
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadBlobOutput'
+  /createAccount:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Create an account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - handle
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                handle:
+                  type: string
+                  format: handle
+                did:
+                  type: string
+                  format: did
+                inviteCode:
+                  type: string
+                password:
+                  type: string
+                recoveryKey:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessJwt
+                  - refreshJwt
+                  - handle
+                  - did
+                properties:
+                  accessJwt:
+                    type: string
+                  refreshJwt:
+                    type: string
+                  handle:
+                    type: string
+                    format: handle
+                  did:
+                    type: string
+                    format: did
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - InvalidHandle
+                      - InvalidPassword
+                      - InvalidInviteCode
+                      - HandleNotAvailable
+                      - UnsupportedDomain
+                      - UnresolvableDid
+                      - IncompatibleDidDoc
+  /createAppPassword:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Create an app-specific password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - password
+                  - createdAt
+                properties:
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: datetime
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - AccountTakedown
+  /createInviteCode:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Create an invite code.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - useCount
+              properties:
+                useCount:
+                  type: integer
+                forAccount:
+                  type: string
+                  format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                properties:
+                  code:
+                    type: string
+        '400':
+          description: Invalid input
+  /createInviteCodes:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Create invite codes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - codeCount
+                - useCount
+              properties:
+                codeCount:
+                  type: integer
+                  default: 1
+                useCount:
+                  type: integer
+                forAccounts:
+                  type: array
+                  items:
+                    type: string
+                    format: did
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codes
+                properties:
+                  codes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/accountCodes'
+        '400':
+          description: Invalid input
+  /createSession:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Create an authentication session.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - identifier
+                - password
+              properties:
+                identifier:
+                  type: string
+                  description: Handle or other identifier supported by the server for the authenticating user.
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessJwt
+                  - refreshJwt
+                  - handle
+                  - did
+                properties:
+                  accessJwt:
+                    type: string
+                  refreshJwt:
+                    type: string
+                  handle:
+                    type: string
+                    format: handle
+                  did:
+                    type: string
+                    format: did
+                  email:
+                    type: string
+        '400':
+          description: Invalid input
+  /deleteAccount:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Delete a user account with a token and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - did
+                - password
+                - token
+              properties:
+                did:
+                  type: string
+                  format: did
+                password:
+                  type: string
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Account successfully deleted
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ExpiredTokenError'
+                  - $ref: '#/components/schemas/InvalidTokenError'
+  /deleteSession:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Delete the current session
+      responses:
+        '200':
+          description: Session successfully deleted
+  /describeServer:
+    get:
+      tags:
+        - com.atproto.server
+      summary: Get a document describing the service's accounts configuration
+      responses:
+        '200':
+          description: Document describing the service's accounts configuration
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - availableUserDomains
+                properties:
+                  inviteCodeRequired:
+                    type: boolean
+                  availableUserDomains:
+                    type: array
+                    items:
+                      type: string
+                  links:
+                    $ref: '#/components/schemas/links'
+  /getAccountInviteCodes:
+    get:
+      tags:
+        - com.atproto.server
+      summary: Get all invite codes for a given account
+      parameters:
+        - name: includeUsed
+          in: query
+          schema:
+            type: boolean
+            default: true
+        - name: createAvailable
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: All invite codes for a given account
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codes
+                properties:
+                  codes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/inviteCode'
+        '400':
+          description: Duplicate Create Error
+          content:
+            application/problem+json:
+  /getSession:
+    get:
+      tags:
+        - com.atproto.server
+      summary: Get information about the current session
+      responses:
+        '200':
+          description: Information about the current session
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - handle
+                  - did
+                properties:
+                  handle:
+                    type: string
+                    format: handle
+                  did:
+                    type: string
+                    format: did
+                  email:
+                    type: string
+  /listAppPasswords:
+    get:
+      tags:
+        - com.atproto.server
+      summary: List all app-specific passwords
+      responses:
+        '200':
+          description: List of all app-specific passwords
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - passwords
+                properties:
+                  passwords:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - name
+                        - createdAt
+                      properties:
+                        name:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: datetime
+        '400':
+          description: AccountTakedown
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /refreshSession:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Refresh an authentication session.
+      responses:
+        '200':
+          description: Refreshed session information
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessJwt
+                  - refreshJwt
+                  - handle
+                  - did
+                properties:
+                  accessJwt:
+                    type: string
+                  refreshJwt:
+                    type: string
+                  handle:
+                    type: string
+                    format: handle
+                  did:
+                    type: string
+                    format: did
+        '400':
+          description: AccountTakedown
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /requestAccountDelete:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Initiate a user account deletion via email.
+      responses:
+        '200':
+          description: Account deletion request initiated
+  /requestPasswordReset:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Initiate a user account password reset via email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Password reset request initiated
+  /resetPassword:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Reset a user account password using a token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Password reset successful
+        '400':
+          description: InvalidToken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: ExpiredToken
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /revokeAppPassword:
+    post:
+      tags:
+        - com.atproto.server
+      summary: Revoke an app-specific password by name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: App-specific password revoked successfully
+components:
+  schemas:
+    ActionType:
+      type: string
+      enum:
+        - takedown
+        - flag
+        - acknowledge
+        - escalate
+      description: Type of moderation action
+    ActionView:
+      type: object
+      required:
+        - id
+        - action
+        - subject
+        - subjectBlobCids
+        - reason
+        - createdBy
+        - createdAt
+        - resolvedReportIds
+      properties:
+        id:
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionType'
+        subject:
+          oneOf: 
+            - $ref: '#/components/schemas/repoRef'
+            - $ref: '#/components/schemas/strongRef'
+        subjectBlobCids:
+          type: array
+          items:
+            type: string
+        createLabelVals:
+          type: array
+          items:
+            type: string
+        negateLabelVals:
+          type: array
+          items:
+            type: string
+        reason:
+          type: string
+        createdBy:
+          type: string
+          format: did
+        createdAt:
+          type: string
+          format: datetime
+        reversal:
+          $ref: '#/components/schemas/ActionReversal'
+        resolvedReportIds:
+          type: array
+          items:
+            type: integer
+    ActionViewDetail:
+      type: object
+      required:
+        - id
+        - action
+        - subject
+        - subjectBlobs
+        - reason
+        - createdBy
+        - createdAt
+        - resolvedReports
+      properties:
+        id:
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionType'
+        subject:
+          oneOf:
+            - $ref: '/components/schemas/repoView'
+            - $ref: '/components/schemas/recordView'
+        subjectBlobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/blobView'
+        createLabelVals:
+          type: array
+          items:
+            type: string
+        negateLabelVals:
+          type: array
+          items:
+            type: string
+        reason:
+          type: string
+        createdBy:
+          type: string
+          format: did
+        createdAt:
+          type: string
+          format: datetime
+        reversal:
+          $ref: '#/components/schemas/ActionReversal'
+        resolvedReports:
+          type: array
+          items:
+            $ref: '#/components/schemas/reportView'
+    ActionReversal:
+      type: object
+      required:
+        - id
+        - action
+        - subject
+        - subjectBlobCids
+        - createdBy
+        - createdAt
+      properties:
+        id:
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionType'
+        subject:
+          oneOf:
+            - $ref: '#/components/schemas/repoRef'
+            - $ref: '#/components/schemas/strongRef'
+        subjectBlobCids:
+          type: array
+          items:
+            type: string
+        createdBy:
+          type: string
+          format: did
+        createdAt:
+          type: string
+          format: datetime
+    ReportType:
+      type: string
+      enum:
+        - spam
+        - harassment
+        - harmfulDangerousActs
+        - violentExtremistContent
+        - childEndangerment
+        - unwantedSexualContent
+        - hatefulAbusiveContent
+        - other
+      description: Type of report
+    ReportStatus:
+      type: string
+      enum:
+        - open
+        - inProgress
+        - resolved
+      description: Status of the report
+    ReportView:
+      type: object
+      required:
+        - id
+        - reportType
+        - status
+        - subject
+        - subjectBlobCids
+        - reason
+        - createdBy
+        - createdAt
+        - resolvedByActionId
+      properties:
+        id:
+          type: integer
+        reportType:
+          $ref: '#/components/schemas/ReportType'
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        subject:
+          oneOf:
+            - $ref: '#/components/schemas/repoRef'
+            - $ref: '#/components/schemas/strongRef'
+        subjectBlobCids:
+          type: array
+          items:
+            type: string
+        reason:
+          type: string
+        createdBy:
+          type: string
+          format: did
+        createdAt:
+          type: string
+          format: datetime
+        resolvedByActionId:
+          type: integer
+    ReportViewDetail:
+      type: object
+      required:
+        - id
+        - reportType
+        - status
+        - subject
+        - subjectBlobs
+        - reason
+        - createdBy
+        - createdAt
+        - resolvedByAction
+      properties:
+        id:
+          type: integer
+        reportType:
+          $ref: '#/components/schemas/ReportType'
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        subject:
+          oneOf: 
+            - $ref: '#/components/schemas/repoView'
+            - $ref: '#/components/schemas/recordView'
+        subjectBlobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Blob'
+        reason:
+          type: string
+        createdBy:
+          type: string
+          format: did
+        createdAt:
+          type: string
+          format: datetime
+        resolvedByAction:
+          $ref: '#/components/schemas/ActionViewDetail'
+    RepoView:
+      type: object
+      required:
+        - did
+        - handle
+        - relatedRecords
+        - indexedAt
+        - moderation
+      properties:
+        did:
+          type: string
+        handle:
+          type: string
+        email:
+          type: string
+        relatedRecords:
+          type: array
+          items:
+            type: string
+        indexedAt:
+          type: string
+          format: date-time
+        moderation:
+          $ref: '#/components/schemas/Moderation'
+        invitedBy:
+          $ref: '#/components/schemas/InviteCode'
+        invitesDisabled:
+          type: boolean
+    RepoViewDetail:
+      allOf:
+        - $ref: '#/components/schemas/RepoView'
+        - type: object
+          required:
+            - labels
+            - invites
+          properties:
+            moderation:
+              $ref: '#/components/schemas/ModerationDetail'
+            labels:
+              type: array
+              items:
+                $ref: '#/components/schemas/Label'
+            invites:
+              type: array
+              items:
+                $ref: '#/components/schemas/InviteCode'
+    RepoRef:
+      type: object
+      required:
+        - did
+      properties:
+        did:
+          type: string
+    RecordView:
+      type: object
+      required:
+        - uri
+        - cid
+        - value
+        - blobCids
+        - indexedAt
+        - moderation
+        - repo
+      properties:
+        uri:
+          type: string
+        cid:
+          type: string
+        value:
+          type: string
+        blobCids:
+          type: array
+          items:
+            type: string
+        indexedAt:
+          type: string
+          format: date-time
+        moderation:
+          $ref: '#/components/schemas/Moderation'
+        repo:
+          $ref: '#/components/schemas/RepoView'
+    RecordViewDetail:
+      allOf:
+        - $ref: '#/components/schemas/RecordView'
+        - type: object
+          required:
+            - blobs
+            - labels
+          properties:
+            blobs:
+              type: array
+              items:
+                $ref: '#/components/schemas/BlobView'
+            labels:
+              type: array
+              items:
+                $ref: '#/components/schemas/Label'
+            moderation:
+              $ref: '#/components/schemas/ModerationDetail'
+    Moderation:
+      type: object
+      properties:
+        currentAction:
+          $ref: '#/components/schemas/ActionViewCurrent'
+    ModerationDetail:
+      allOf:
+        - $ref: '#/components/schemas/Moderation'
+        - type: object
+          required:
+            - actions
+            - reports
+          properties:
+            actions:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActionView'
+            reports:
+              type: array
+              items:
+                $ref: '#/components/schemas/ReportView'
+    BlobView:
+      type: object
+      required:
+        - cid
+        - mimeType
+        - size
+        - createdAt
+      properties:
+        cid:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        details:
+          oneOf:
+            - $ref: '#/components/schemas/ImageDetails'
+            - $ref: '#/components/schemas/VideoDetails'
+        moderation:
+          $ref: '#/components/schemas/Moderation'
+    ImageDetails:
+      type: object
+      required:
+        - width
+        - height
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+
+    VideoDetails:
+      type: object
+      required:
+        - width
+        - height
+        - length
+      properties:
+        width:
+          type: integer
+        height:
+          type: integer
+        length:
+          type: integer
+    ResolveHandleOutput:
+      type: object
+      required:
+        - did
+      properties:
+        did:
+          type: string
+          format: did
+    UpdateHandleInput:
+      type: object
+      required:
+        - handle
+      properties:
+        handle:
+          type: string
+          format: handle
+    Label:
+      type: object
+      required:
+        - src
+        - uri
+        - val
+        - cts
+      properties:
+        src:
+          type: string
+          format: did
+          description: DID of the actor who created this label
+        uri:
+          type: string
+          format: uri
+          description: AT URI of the record, repository (account), or other resource which this label applies to
+        cid:
+          type: string
+          format: cid
+          description: optionally, CID specifying the specific version of 'uri' resource this label applies to
+        val:
+          type: string
+          maxLength: 128
+          description: the short string name of the value or type of this label
+        neg:
+          type: boolean
+          description: if true, this is a negation label, overwriting a previous label
+        cts:
+          type: string
+          format: datetime
+          description: timestamp when this label was created
+    ReasonType:
+      type: string
+      enum:
+        - '#/components/schemas/reasonSpam'
+        - '#/components/schemas/reasonViolation'
+        - '#/components/schemas/reasonMisleading'
+        - '#/components/schemas/reasonSexual'
+        - '#/components/schemas/reasonRude'
+        - '#/components/schemas/reasonOther'
+      description: Type of report reason
+    ReasonSpam:
+      type: string
+      description:
+        Spam: frequent unwanted promotion, replies, mentions
+    ReasonViolation:
+      type: string
+      description: Direct violation of server rules, laws, terms of service
+    ReasonMisleading:
+      type: string
+      description: Misleading identity, affiliation, or content
+    ReasonSexual:
+      type: string
+      description: Unwanted or mis-labeled sexual content
+    ReasonRude:
+      type: string
+      description: Rude, harassing, explicit, or otherwise unwelcoming behavior
+    ReasonOther:
+      type: string
+      description:
+        Other: reports not falling under another report category
+    ApplyWritesInput:
+      type: object
+      required:
+        - repo
+        - writes
+      properties:
+        repo:
+          type: string
+          format: at-identifier
+          description: The handle or DID of the repo.
+        validate:
+          type: boolean
+          default: true
+          description: Validate the records?
+        writes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WriteAction'
+        swapCommit:
+          type: string
+          format: cid
+    WriteAction:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/Create'
+        - $ref: '#/components/schemas/Update'
+        - $ref: '#/components/schemas/Delete'
+    Create:
+      type: object
+      required:
+        - action
+        - collection
+        - value
+      properties:
+        action:
+          type: string
+          enum:
+            - create
+        collection:
+          type: string
+          format: nsid
+        rkey:
+          type: string
+        value:
+          type: string
+    Update:
+      type: object
+      required:
+        - action
+        - collection
+        - rkey
+        - value
+      properties:
+        action:
+          type: string
+          enum:
+            - update
+        collection:
+          type: string
+          format: nsid
+        rkey:
+          type: string
+        value:
+          type: string
+    Delete:
+      type: object
+      required:
+        - action
+        - collection
+        - rkey
+      properties:
+        action:
+          type: string
+          enum:
+            - delete
+        collection:
+          type: string
+          format: nsid
+        rkey:
+          type: string
+    InvalidSwapError:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          enum:
+            - InvalidSwap
+    Record:
+      type: object
+      required:
+        - uri
+        - cid
+        - value
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        cid:
+          type: string
+          format: cid
+        value:
+          type: string 
+        RepoDescription:
+          type: object
+          required:
+            - handle
+            - did
+            - didDoc
+            - collections
+            - handleIsCorrect
+          properties:
+            handle:
+              type: string
+              format: handle
+            did:
+              type: string
+              format: did
+            didDoc:
+              type: string 
+            collections:
+              type: array
+              items:
+                type: string
+                format: nsid
+            handleIsCorrect:
+              type: boolean
+    CreateRecordInput:
+      type: object
+      required:
+        - repo
+        - collection
+        - record
+      properties:
+        repo:
+          type: string
+          format: at-identifier
+          description: The handle or DID of the repo.
+        collection:
+          type: string
+          format: nsid
+          description: The NSID of the record collection.
+        rkey:
+          type: string
+          description: The key of the record.
+        validate:
+          type: boolean
+          default: true
+          description: Validate the record?
+        record:
+          type: object 
+          description: The record to create.
+        swapCommit:
+          type: string
+          format: cid
+          description: Compare and swap with the previous commit by cid.
+    CreateRecordOutput:
+      type: object
+      required:
+        - uri
+        - cid
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        cid:
+          type: string
+          format: cid
+    DeleteRecordInput:
+      type: object
+      required:
+        - repo
+        - collection
+        - rkey
+      properties:
+        repo:
+          type: string
+          format: at-identifier
+          description: The handle or DID of the repo.
+        collection:
+          type: string
+          format: nsid
+          description: The NSID of the record collection.
+        rkey:
+          type: string
+          description: The key of the record.
+        swapRecord:
+          type: string
+          format: cid
+          description: Compare and swap with the previous record by cid.
+        swapCommit:
+          type: string
+          format: cid
+          description: Compare and swap with the previous commit by cid.
+    PutRecordInput:
+      type: object
+      required:
+        - repo
+        - collection
+        - rkey
+        - record
+      properties:
+        repo:
+          type: string
+          format: at-identifier
+          description: The handle or DID of the repo.
+        collection:
+          type: string
+          format: nsid
+          description: The NSID of the record collection.
+        rkey:
+          type: string
+          description: The key of the record.
+        validate:
+          type: boolean
+          default: true
+          description: Validate the record?
+        record:
+          type: string 
+          description: The record to write.
+        swapRecord:
+          type: string
+          format: cid
+          nullable: true
+          description: Compare and swap with the previous record by cid.
+        swapCommit:
+          type: string
+          format: cid
+          description: Compare and swap with the previous commit by cid.
+    PutRecordOutput:
+      type: object
+      required:
+        - uri
+        - cid
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        cid:
+          type: string
+          format: cid
+    RebaseRepoInput:
+      type: object
+      required:
+        - repo
+      properties:
+        repo:
+          type: string
+          format: at-identifier
+          description: The handle or DID of the repo.
+        swapCommit:
+          type: string
+          format: cid
+          description: Compare and swap with the previous commit by cid.
+    StrongRef:
+      type: object
+      required:
+        - uri
+        - cid
+      properties:
+        uri:
+          type: string
+          format: at-uri
+        cid:
+          type: string
+          format: cid
+    UploadBlobOutput:
+      type: object
+      required:
+        - blob
+      properties:
+        blob:
+          type: string
+          format: byte
+    accountCodes:
+      type: object
+      required:
+        - account
+        - codes
+      properties:
+        account:
+          type: string
+        codes:
+          type: array
+          items:
+            type: string
+    ExpiredTokenError:
+      type: object
+      properties:
+        name:
+          type: string
+          enum: [ 'ExpiredToken' ]
+    InvalidTokenError:
+      type: object
+      properties:
+        name:
+          type: string
+          enum: [ 'InvalidToken' ]
+    links:
+      type: object
+      properties:
+        privacyPolicy:
+          type: string
+        termsOfService:
+          type: string
+    inviteCode:
+      type: object
+      required: [ "code", "available", "disabled", "forAccount", "createdBy", "createdAt", "uses" ]
+      properties:
+        code: { type: "string" }
+        available: { type: "integer" }
+        disabled: { type: "boolean" }
+        forAccount: { type: "string" }
+        createdBy: { type: "string" }
+        createdAt: { type: "string", format: "datetime" }
+        uses:
+          type: "array"
+          items:
+            type: object
+            required: [ "usedBy", "usedAt" ]
+            properties:
+              usedBy: { type: "string", format: "did" }
+              usedAt: { type: "string", format: "datetime" }
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
