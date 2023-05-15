@@ -434,7 +434,7 @@ paths:
                   repostedBy:
                     type: array
                     items:
-                      $ref: 'app.bsky.actor.defs.yaml#/components/schemas/ProfileView'
+                      $ref: '#/components/schemas/ProfileView'
   /getTimeline:
     get:
       tags:
@@ -1414,7 +1414,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ImagesEmbedView'
             - $ref: '#/components/schemas/ExternalEmbedView'
-            - $ref: 'l#/components/schemas/RecordEmbedView'
+            - $ref: '#/components/schemas/RecordEmbedView'
             - $ref: '#/components/schemas/RecordWithMediaEmbedView'
         replyCount:
           type: integer
@@ -1483,10 +1483,16 @@ components:
         reply:
           $ref: '#/components/schemas/ReplyRef'
         embed:
-          $ref: 'Embed'
+          $ref: '#/components/schemas/Embed'
         createdAt:
           type: string
           format: datetime
+    Embed:
+      oneOf:
+        - $ref: '#/components/schemas/ImagesEmbedView'
+        - $ref: '#/components/schemas/ExternalEmbedView'
+        - $ref: '#/components/schemas/RecordEmbedView'
+        - $ref: '#/components/schemas/RecordWithMediaEmbedView'
     ReplyRef:
       type: object
       required:
