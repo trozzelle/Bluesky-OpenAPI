@@ -1,6 +1,9 @@
 openapi: 3.0.0
 servers:
   # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/impsh/Com-Atproto/1.0.0
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
 info:
@@ -120,7 +123,7 @@ paths:
                   codes:
                     type: array
                     items:
-                      $ref: '#/components/schemas/inviteCode'
+                      $ref: '#/components/schemas/InviteCode'
         '400':
           description: Invalid input
   /getModerationAction:
@@ -140,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/actionViewDetail'
+                $ref: '#/components/schemas/ActionViewDetail'
         '400':
           description: Invalid input
   /getModerationActions:
@@ -179,7 +182,7 @@ paths:
                   actions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/actionView'
+                      $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
   /getModerationReport:
@@ -199,7 +202,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/reportViewDetail'
+                $ref: '#/components/schemas/ReportViewDetail'
         '400':
           description: Invalid input
   /getModerationReports:
@@ -251,7 +254,7 @@ paths:
                   reports:
                     type: array
                     items:
-                      $ref: '#/components/schemas/reportView'
+                      $ref: '#/components/schemas/ReportView'
         '400':
           description: Invalid input
   /getRecordViewDetail:
@@ -277,7 +280,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/recordViewDetail'
+                $ref: '#/components/schemas/RecordViewDetail'
         '400':
           description: Invalid input
   /getRepo:
@@ -298,7 +301,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/repoViewDetail'
+                $ref: '#/components/schemas/RepoViewDetail'
         '400':
           description: Invalid input
   /resolveModerationReports:
@@ -332,7 +335,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/actionView'
+                $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
   /reverseModerationAction:
@@ -364,7 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/actionView'
+                $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
   /searchRepos:
@@ -407,7 +410,7 @@ paths:
                   repos:
                     type: array
                     items:
-                      $ref: '#/components/schemas/repoView'
+                      $ref: '#/components/schemas/RepoView'
         '400':
           description: Invalid input
   /takeModerationAction:
@@ -434,8 +437,8 @@ paths:
                     - com.atproto.admin.defs#acknowledge
                 subject:
                   oneOf:
-                    - $ref: '#/components/schemas/repoRef'
-                    - $ref: '#/components/schemas/strongRef'
+                    - $ref: '#/components/schemas/RepoRef'
+                    - $ref: '#/components/schemas/StrongRef'
                 subjectBlobCids:
                   type: array
                   items:
@@ -460,7 +463,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/actionView'
+                $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
         '409':
@@ -1131,7 +1134,7 @@ paths:
                   codes:
                     type: array
                     items:
-                      $ref: '#/components/schemas/accountCodes'
+                      $ref: '#/components/schemas/AccountCodes'
         '400':
           description: Invalid input
   /createSession:
@@ -1244,7 +1247,7 @@ paths:
                     items:
                       type: string
                   links:
-                    $ref: '#/components/schemas/links'
+                    $ref: '#/components/schemas/Links'
   /getAccountInviteCodes:
     get:
       tags:
@@ -1274,11 +1277,9 @@ paths:
                   codes:
                     type: array
                     items:
-                      $ref: '#/components/schemas/inviteCode'
+                      $ref: '#/components/schemas/InviteCode'
         '400':
           description: Duplicate Create Error
-          content:
-            application/problem+json:
   /getSession:
     get:
       tags:
@@ -1484,9 +1485,9 @@ components:
         action:
           $ref: '#/components/schemas/ActionType'
         subject:
-          oneOf: 
-            - $ref: '#/components/schemas/repoRef'
-            - $ref: '#/components/schemas/strongRef'
+          oneOf:
+            - $ref: '#/components/schemas/RepoRef'
+            - $ref: '#/components/schemas/StrongRef'
         subjectBlobCids:
           type: array
           items:
@@ -1531,12 +1532,12 @@ components:
           $ref: '#/components/schemas/ActionType'
         subject:
           oneOf:
-            - $ref: '/components/schemas/repoView'
-            - $ref: '/components/schemas/recordView'
+            - $ref: '#/components/schemas/RepoView'
+            - $ref: '#/components/schemas/RecordView'
         subjectBlobs:
           type: array
           items:
-            $ref: '#/components/schemas/blobView'
+            $ref: '#/components/schemas/BlobView'
         createLabelVals:
           type: array
           items:
@@ -1558,7 +1559,17 @@ components:
         resolvedReports:
           type: array
           items:
-            $ref: '#/components/schemas/reportView'
+            $ref: '#/components/schemas/ReportView'
+    ActionViewCurrent:
+      type: object
+      required:
+        - id
+        - action
+      properties:
+        id:
+          type: integer
+        action:
+          $ref: '#/components/schemas/ActionType'
     ActionReversal:
       type: object
       required:
@@ -1575,8 +1586,8 @@ components:
           $ref: '#/components/schemas/ActionType'
         subject:
           oneOf:
-            - $ref: '#/components/schemas/repoRef'
-            - $ref: '#/components/schemas/strongRef'
+            - $ref: '#/components/schemas/RepoRef'
+            - $ref: '#/components/schemas/StrongRef'
         subjectBlobCids:
           type: array
           items:
@@ -1627,8 +1638,8 @@ components:
           $ref: '#/components/schemas/ReportStatus'
         subject:
           oneOf:
-            - $ref: '#/components/schemas/repoRef'
-            - $ref: '#/components/schemas/strongRef'
+            - $ref: '#/components/schemas/RepoRef'
+            - $ref: '#/components/schemas/StrongRef'
         subjectBlobCids:
           type: array
           items:
@@ -1663,9 +1674,9 @@ components:
         status:
           $ref: '#/components/schemas/ReportStatus'
         subject:
-          oneOf: 
-            - $ref: '#/components/schemas/repoView'
-            - $ref: '#/components/schemas/recordView'
+          oneOf:
+            - $ref: '#/components/schemas/RepoView'
+            - $ref: '#/components/schemas/RecordView'
         subjectBlobs:
           type: array
           items:
@@ -1833,7 +1844,6 @@ components:
           type: integer
         height:
           type: integer
-
     VideoDetails:
       type: object
       required:
@@ -1907,7 +1917,7 @@ components:
     ReasonSpam:
       type: string
       description:
-        Spam: frequent unwanted promotion, replies, mentions
+        Spam - frequent unwanted promotion, replies, mentions
     ReasonViolation:
       type: string
       description: Direct violation of server rules, laws, terms of service
@@ -1923,7 +1933,7 @@ components:
     ReasonOther:
       type: string
       description:
-        Other: reports not falling under another report category
+        Other - reports not falling under another report category
     ApplyWritesInput:
       type: object
       required:
@@ -2027,31 +2037,31 @@ components:
           type: string
           format: cid
         value:
-          type: string 
-        RepoDescription:
-          type: object
-          required:
-            - handle
-            - did
-            - didDoc
-            - collections
-            - handleIsCorrect
-          properties:
-            handle:
-              type: string
-              format: handle
-            did:
-              type: string
-              format: did
-            didDoc:
-              type: string 
-            collections:
-              type: array
-              items:
-                type: string
-                format: nsid
-            handleIsCorrect:
-              type: boolean
+          type: string
+    RepoDescription:
+      type: object
+      required:
+        - handle
+        - did
+        - didDoc
+        - collections
+        - handleIsCorrect
+      properties:
+        handle:
+          type: string
+          format: handle
+        did:
+          type: string
+          format: did
+        didDoc:
+          type: string
+        collections:
+          type: array
+          items:
+            type: string
+            format: nsid
+        handleIsCorrect:
+          type: boolean
     CreateRecordInput:
       type: object
       required:
@@ -2075,7 +2085,7 @@ components:
           default: true
           description: Validate the record?
         record:
-          type: object 
+          type: object
           description: The record to create.
         swapCommit:
           type: string
@@ -2143,7 +2153,7 @@ components:
           default: true
           description: Validate the record?
         record:
-          type: string 
+          type: string
           description: The record to write.
         swapRecord:
           type: string
@@ -2199,7 +2209,7 @@ components:
         blob:
           type: string
           format: byte
-    accountCodes:
+    AccountCodes:
       type: object
       required:
         - account
@@ -2223,14 +2233,14 @@ components:
         name:
           type: string
           enum: [ 'InvalidToken' ]
-    links:
+    Links:
       type: object
       properties:
         privacyPolicy:
           type: string
         termsOfService:
           type: string
-    inviteCode:
+    InviteCode:
       type: object
       required: [ "code", "available", "disabled", "forAccount", "createdBy", "createdAt", "uses" ]
       properties:
