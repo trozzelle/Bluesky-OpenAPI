@@ -2,7 +2,7 @@ openapi: 3.0.0
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
+    url: https://bsky.social/xrpc
 info:
   description: Unofficial OpenAPI specification for the Bluesky API endpoints.
   version: '1.0'
@@ -13,7 +13,7 @@ info:
     name: MIT
     url: 'https://opensource.org/license/mit/'
 paths:
-  /getPreferences:
+  /app.bsky.actor.getPreferences:
     get:
       tags:
         - app.bsky.actor
@@ -31,7 +31,7 @@ paths:
                 properties:
                   preferences:
                     $ref: '#/components/schemas/Preferences'
-  /getProfile:
+  /app.bsky.actor.getProfile:
     get:
       tags:
         - app.bsky.actor
@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProfileViewDetailed'
-  /getProfiles:
+  /app.bsky.actor.getProfiles:
     get:
       tags:
         - app.bsky.actor
@@ -85,7 +85,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileViewDetailed'
-  /getSuggestions:
+  /app.bsky.actor.getSuggestions:
     get:
       tags:
         - app.bsky.actor
@@ -146,7 +146,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /searchActors:
+  /app.bsky.actor.searchActors:
     get:
       tags:
         - app.bsky.actor
@@ -187,7 +187,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-  /searchActorsTypeahead:
+  /app.bsky.actor.searchActorsTypeahead:
     get:
       tags:
         - app.bsky.actor
@@ -221,7 +221,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileViewBasic'
-  /getAuthorFeed:
+  /app.bsky.feed.getAuthorFeed:
     get:
       tags:
         - app.bsky.feed
@@ -267,7 +267,7 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/BlockedActor'
                   - $ref: '#/components/schemas/BlockedByActor'
-  /getLikes:
+  /app.bsky.feed.getLikes:
     get:
       tags:
         - app.bsky.feed
@@ -317,7 +317,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Like'
-  /getPostThread:
+  /app.bsky.feed.getPostThread:
     get:
       tags:
         - app.bsky.feed
@@ -357,7 +357,7 @@ paths:
                   name:
                     type: string
                     description: NotFound
-  /getPosts:
+  /app.bsky.feed.getPosts:
     get:
       tags:
         - app.bsky.feed
@@ -385,7 +385,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/PostView'
-  /repostedBy:
+  /app.bsky.feed.repostedBy:
     get:
       tags:
         - app.bsky.feed
@@ -435,7 +435,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-  /getTimeline:
+  /app.bsky.feed.getTimeline:
     get:
       tags:
         - app.bsky.feed
@@ -472,7 +472,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/FeedViewPost'
-  /follow:
+  /app.bsky.feed.follow:
     post:
       summary: "A social follow."
       operationId: follow
@@ -501,7 +501,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getBlocks:
+  /app.bsky.graph.getBlocks:
     get:
       summary: "Who is the requester's account blocking?"
       operationId: getBlocks
@@ -537,7 +537,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getFollowers:
+  /app.bsky.graph.getFollowers:
     get:
       summary: "Who is following an actor?"
       operationId: getFollowers
@@ -581,7 +581,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getFollows:
+  /app.bsky.graph.getFollows:
     get:
       summary: "Who is an actor following?"
       operationId: getFollows
@@ -625,7 +625,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getList:
+  /app.bsky.graph.getList:
     get:
       summary: "Fetch a list of actors"
       operationId: getList
@@ -669,7 +669,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getListMutes:
+  /app.bsky.graph.getListMutes:
     get:
       summary: "Which lists is the requester's account muting?"
       operationId: getListMutes
@@ -705,7 +705,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getLists:
+  /app.bsky.graph.getLists:
     get:
       summary: "Fetch a list of lists that belong to an actor"
       operationId: getLists
@@ -747,7 +747,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /getMutes:
+  /app.bsky.graph.getMutes:
     get:
       summary: "Who does the viewer mute?"
       operationId: getMutes
@@ -785,7 +785,7 @@ paths:
           description: Invalid input
         '500':
           description: Unexpected error
-  /muteActor:
+  /app.bsky.graph.muteActor:
     post:
       tags:
         - app.bsky.graph
@@ -810,7 +810,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /muteActorList:
+  /app.bsky.graph.muteActorList:
     post:
       tags:
         - app.bsky.graph
@@ -835,7 +835,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /unmuteActor:
+  /app.bsky.graph.unmuteActor:
     post:
       tags:
         - app.bsky.graph
@@ -860,7 +860,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /unmuteActorList:
+  /app.bsky.graph.unmuteActorList:
     post:
       tags:
         - app.bsky.graph
@@ -885,7 +885,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /getUnreadCount:
+  /app.bsky.notification.getUnreadCount:
     get:
       tags:
         - app.bsky.notification
@@ -915,7 +915,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /listNotifications:
+  /app.bsky.notification.listNotifications:
     get:
       tags:
         - app.bsky.notification
@@ -964,7 +964,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /updateSeen:
+  /app.bsky.notification.updateSeen:
     post:
       tags:
         - app.bsky.notification
@@ -988,7 +988,7 @@ paths:
           description: "Invalid request"
         '500':
           description: "Internal server error"
-  /popular:
+  /app.bsky.unspecced.popular:
     get:
       tags:
         - app.bsky.unspecced
@@ -1029,7 +1029,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/FeedViewPost'
-
 components:
   schemas:
     ProfileViewBasic:
@@ -1055,7 +1054,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
-
     ProfileView:
       type: object
       required:
@@ -1085,7 +1083,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
-
     ProfileViewDetailed:
       type: object
       required:
@@ -1123,7 +1120,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Label'
-
     ViewerState:
       type: object
       properties:
@@ -1142,14 +1138,12 @@ components:
         followedBy:
           type: string
           format: at-uri
-
     Preferences:
       type: array
       items:
         oneOf:
           - $ref: '#/components/schemas/AdultContentPref'
           - $ref: '#/components/schemas/ContentLabelPref'
-
     AdultContentPref:
       type: object
       required:
@@ -1158,7 +1152,6 @@ components:
         enabled:
           type: boolean
           default: false
-
     ContentLabelPref:
       type: object
       required:
@@ -1170,7 +1163,6 @@ components:
         visibility:
           type: string
           enum: ['show', 'warn', 'hide']
-
     Label:
       type: object
       description: Metadata tag on an atproto resource (eg, repo or record)
