@@ -1680,7 +1680,7 @@ components:
         subjectBlobs:
           type: array
           items:
-            $ref: '#/components/schemas/Blob'
+            $ref: '#/components/schemas/BlobView'
         reason:
           type: string
         createdBy:
