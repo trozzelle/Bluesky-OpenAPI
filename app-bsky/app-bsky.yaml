@@ -1303,12 +1303,10 @@ components:
         - record
       properties:
         record:
-          type: object
-          properties:
-            oneOf:
-              - $ref: '#/components/schemas/ViewRecord'
-              - $ref: '#/components/schemas/ViewNotFound'
-              - $ref: '#/components/schemas/ViewBlocked'
+          oneOf:
+            - $ref: '#/components/schemas/ViewRecord'
+            - $ref: '#/components/schemas/ViewNotFound'
+            - $ref: '#/components/schemas/ViewBlocked'
     ViewRecord:
       type: object
       required:
