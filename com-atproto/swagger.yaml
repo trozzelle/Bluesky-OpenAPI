@@ -4,8 +4,8 @@ servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/impsh/Com-Atproto/1.0.0
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/impsh/Bluesky-API/1.0.0
+  - description: Bluesky XRPC Service
+    url: https://bsky.social/xrpc
 info:
   description: Unofficial OpenAPI specification for the AT Protocols native server endpoints.
   version: "1.0.0"
@@ -16,7 +16,7 @@ info:
     name: MIT
     url: 'https://opensource.org/license/mit/'
 paths:
-  /disableAccountInvites:
+  /com.atproto.admin.disableAccountInvites:
     post:
       tags:
         - com.atproto.admin
@@ -38,7 +38,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /disableInviteCodes:
+  /com.atproto.admin.disableInviteCodes:
     post:
       tags:
         - com.atproto.admin
@@ -63,7 +63,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /enableAccountInvites:
+  /com.atproto.admin.enableAccountInvites:
     post:
       tags:
         - com.atproto.admin
@@ -85,7 +85,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /getInviteCodes:
+  /com.atproto.admin.getInviteCodes:
     get:
       tags:
         - com.atproto.admin
@@ -126,7 +126,7 @@ paths:
                       $ref: '#/components/schemas/InviteCode'
         '400':
           description: Invalid input
-  /getModerationAction:
+  /com.atproto.admin.getModerationAction:
     get:
       tags:
         - com.atproto.admin
@@ -146,7 +146,7 @@ paths:
                 $ref: '#/components/schemas/ActionViewDetail'
         '400':
           description: Invalid input
-  /getModerationActions:
+  /com.atproto.admin.getModerationActions:
     get:
       tags:
         - com.atproto.admin
@@ -185,7 +185,7 @@ paths:
                       $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
-  /getModerationReport:
+  /com.atproto.admin.getModerationReport:
     get:
       tags:
         - com.atproto.admin
@@ -205,7 +205,7 @@ paths:
                 $ref: '#/components/schemas/ReportViewDetail'
         '400':
           description: Invalid input
-  /getModerationReports:
+  /com.atproto.admin.getModerationReports:
     get:
       tags:
         - com.atproto.admin
@@ -257,7 +257,7 @@ paths:
                       $ref: '#/components/schemas/ReportView'
         '400':
           description: Invalid input
-  /getRecordViewDetail:
+  /com.atproto.admin.getRecordViewDetail:
     get:
       tags:
         - com.atproto.admin
@@ -283,7 +283,7 @@ paths:
                 $ref: '#/components/schemas/RecordViewDetail'
         '400':
           description: Invalid input
-  /getRepo:
+  /com.atproto.admin.getRepo:
     get:
       tags:
         - com.atproto.admin
@@ -304,7 +304,7 @@ paths:
                 $ref: '#/components/schemas/RepoViewDetail'
         '400':
           description: Invalid input
-  /resolveModerationReports:
+  /com.atproto.admin.resolveModerationReports:
     post:
       tags:
         - com.atproto.admin
@@ -338,7 +338,7 @@ paths:
                 $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
-  /reverseModerationAction:
+  /com.atproto.admin.reverseModerationAction:
     post:
       tags:
         - com.atproto.admin
@@ -370,7 +370,7 @@ paths:
                 $ref: '#/components/schemas/ActionView'
         '400':
           description: Invalid input
-  /searchRepos:
+  /com.atproto.admin.searchRepos:
     get:
       tags:
         - com.atproto.admin
@@ -413,7 +413,7 @@ paths:
                       $ref: '#/components/schemas/RepoView'
         '400':
           description: Invalid input
-  /takeModerationAction:
+  /com.atproto.admin.takeModerationAction:
     post:
       tags:
         - com.atproto.admin
@@ -468,7 +468,7 @@ paths:
           description: Invalid input
         '409':
           description: SubjectHasAction error
-  /updateAccountHandle:
+  /com.atproto.admin.updateAccountHandle:
     post:
       tags:
         - com.atproto.admin
@@ -493,7 +493,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /updateAccountEmail:
+  /com.atproto.admin.updateAccountEmail:
     post:
       tags:
         - com.atproto.admin
@@ -518,7 +518,7 @@ paths:
           description: Successful operation
         '400':
           description: Invalid input
-  /resolveHandle:
+  /com.atproto.identity.resolveHandle:
     get:
       tags:
         - com.atproto.identity
@@ -539,7 +539,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResolveHandleOutput'
-  /updateHandle:
+  /com.atproto.identity.updateHandle:
     post:
       tags:
         - com.atproto.identity
@@ -559,7 +559,7 @@ paths:
           description: Invalid input
         '500':
           description: Internal Server Error
-  /queryLabels:
+  /com.atproto.label.queryLabels:
     get:
       tags:
         - com.atproto.label
@@ -611,7 +611,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Label'
-  /subscribeLabels:
+  /com.atproto.label.subscribeLabels:
     post:
       tags:
         - com.atproto.label
@@ -654,7 +654,7 @@ paths:
                     enum: [ OutdatedCursor ]
                   message:
                     type: string
-  /createReport:
+  /com.atproto.moderation.createReport:
     post:
       tags:
         - com.atproto.moderation
@@ -709,7 +709,7 @@ paths:
                   createdAt:
                     type: string
                     format: datetime
-  /applyWrites:
+  /com.atproto.repo.applyWrites:
     post:
       tags:
         - com.atproto.repo
@@ -731,7 +731,7 @@ paths:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/InvalidSwapError'
-  /createRecord:
+  /com.atproto.repo.createRecord:
     post:
       tags:
         - com.atproto.repo
@@ -754,7 +754,7 @@ paths:
         '400':
           description: InvalidSwap
           content: { }
-  /putRecord:
+  /com.atproto.repo.putRecord:
     post:
       tags:
         - com.atproto.repo
@@ -777,7 +777,7 @@ paths:
         '400':
           description: InvalidSwap
           content: { }
-  /deleteRecord:
+  /com.atproto.repo.deleteRecord:
     post:
       tags:
         - com.atproto.repo
@@ -796,7 +796,7 @@ paths:
         '400':
           description: InvalidSwap
           content: { }
-  /getRecord:
+  /com.atproto.repo.getRecord:
     get:
       tags:
         - com.atproto.repo
@@ -837,7 +837,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Record'
-  /listRecords:
+  /com.atproto.repo.listRecords:
     get:
       tags:
         - com.atproto.repo
@@ -892,7 +892,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Record'
-  /describeRepo:
+  /com.atproto.repo.describeRepo:
     get:
       tags:
         - com.atproto.repo
@@ -933,7 +933,7 @@ paths:
         '400':
           description: InvalidSwap
           content: { }
-  /uploadBlob:
+  /com.atproto.repo.uploadBlob:
     post:
       tags:
         - com.atproto.repo
@@ -951,7 +951,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UploadBlobOutput'
-  /createAccount:
+  /com.atproto.server.createAccount:
     post:
       tags:
         - com.atproto.server
@@ -1020,7 +1020,7 @@ paths:
                       - UnsupportedDomain
                       - UnresolvableDid
                       - IncompatibleDidDoc
-  /createAppPassword:
+  /com.atproto.server.createAppPassword:
     post:
       tags:
         - com.atproto.server
@@ -1065,7 +1065,7 @@ paths:
                     type: string
                     enum:
                       - AccountTakedown
-  /createInviteCode:
+  /com.atproto.server.createInviteCode:
     post:
       tags:
         - com.atproto.server
@@ -1097,7 +1097,7 @@ paths:
                     type: string
         '400':
           description: Invalid input
-  /createInviteCodes:
+  /com.atproto.server.createInviteCodes:
     post:
       tags:
         - com.atproto.server
@@ -1137,7 +1137,7 @@ paths:
                       $ref: '#/components/schemas/AccountCodes'
         '400':
           description: Invalid input
-  /createSession:
+  /com.atproto.server.createSession:
     post:
       tags:
         - com.atproto.server
@@ -1183,7 +1183,7 @@ paths:
                     type: string
         '400':
           description: Invalid input
-  /deleteAccount:
+  /com.atproto.server.deleteAccount:
     post:
       tags:
         - com.atproto.server
@@ -1217,7 +1217,7 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/ExpiredTokenError'
                   - $ref: '#/components/schemas/InvalidTokenError'
-  /deleteSession:
+  /com.atproto.server.deleteSession:
     post:
       tags:
         - com.atproto.server
@@ -1225,7 +1225,7 @@ paths:
       responses:
         '200':
           description: Session successfully deleted
-  /describeServer:
+  /com.atproto.server.describeServer:
     get:
       tags:
         - com.atproto.server
@@ -1248,7 +1248,7 @@ paths:
                       type: string
                   links:
                     $ref: '#/components/schemas/Links'
-  /getAccountInviteCodes:
+  /com.atproto.server.getAccountInviteCodes:
     get:
       tags:
         - com.atproto.server
@@ -1280,7 +1280,7 @@ paths:
                       $ref: '#/components/schemas/InviteCode'
         '400':
           description: Duplicate Create Error
-  /getSession:
+  /com.atproto.server.getSession:
     get:
       tags:
         - com.atproto.server
@@ -1304,7 +1304,7 @@ paths:
                     format: did
                   email:
                     type: string
-  /listAppPasswords:
+  /com.atproto.server.listAppPasswords:
     get:
       tags:
         - com.atproto.server
@@ -1341,7 +1341,7 @@ paths:
                 properties:
                   error:
                     type: string
-  /refreshSession:
+  /com.atproto.server.refreshSession:
     post:
       tags:
         - com.atproto.server
@@ -1378,7 +1378,7 @@ paths:
                 properties:
                   error:
                     type: string
-  /requestAccountDelete:
+  /com.atproto.server.requestAccountDelete:
     post:
       tags:
         - com.atproto.server
@@ -1386,7 +1386,7 @@ paths:
       responses:
         '200':
           description: Account deletion request initiated
-  /requestPasswordReset:
+  /com.atproto.server.requestPasswordReset:
     post:
       tags:
         - com.atproto.server
@@ -1405,7 +1405,7 @@ paths:
       responses:
         '200':
           description: Password reset request initiated
-  /resetPassword:
+  /com.atproto.server.resetPassword:
     post:
       tags:
         - com.atproto.server
@@ -1439,7 +1439,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /revokeAppPassword:
+  /com.atproto.server.revokeAppPassword:
     post:
       tags:
         - com.atproto.server
