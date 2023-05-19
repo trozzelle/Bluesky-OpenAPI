@@ -124,7 +124,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ProfileView'
-  /putPreferences:
+  /app.bsky.actor.putPreferences:
     post:
       tags:
         - app.bsky.actor
